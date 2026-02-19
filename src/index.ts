@@ -2,6 +2,7 @@ import express from 'express'
 import swaggerUi from 'swagger-ui-express'
 import swaggerJsDoc from 'swagger-jsdoc'
 import mongoose from 'mongoose'
+import User from './models/user.ts'
 
 const app = express();
 const PORT = 3000;
@@ -46,6 +47,27 @@ app.get('/', (req, res) => {
 app.get('/api/hello', (req, res) => {
     res.send('Hello World!');
 });
+
+/** 
+ * @swagger
+ * /get-all-users:
+ *  get:
+ *      summary: Get all users
+ *      responses:
+ *          200:
+ *              description: Returns all users
+ *          500:
+ *              description: Internal Server Error
+ * 
+*/
+app.get('/get-all-users', async (req, res) => {
+    try {
+        const users = await User.find();
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ error: `Failed to fetch users: ${error}`})
+    }
+})
 
 app.listen(PORT, () => {
     console.log(`Running on Port ${PORT}`);
