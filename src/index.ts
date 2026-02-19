@@ -1,10 +1,14 @@
 import express from 'express'
 import swaggerUi from 'swagger-ui-express'
 import swaggerJsDoc from 'swagger-jsdoc'
+import mongoose from 'mongoose'
 
 const app = express();
-
 const PORT = 3000;
+
+mongoose.connect('mongodb://localhost:27017/log-app')
+    .then(() => console.log('Connected to MongoDB'))
+    .catch((err) => console.error('MongoDB connection error:', err))
 
 const swaggerOptions = {
   swaggerDefinition: {
@@ -40,7 +44,7 @@ app.get('/', (req, res) => {
  *         description: Returns Hello World
  */
 app.get('/api/hello', (req, res) => {
-  res.send('Hello World!');
+    res.send('Hello World!');
 });
 
 app.listen(PORT, () => {
