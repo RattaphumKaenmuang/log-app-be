@@ -104,15 +104,17 @@ router.get('/get-paginated-logs', async (req: Request, res: Response) => {
         let sortBy = req.query.sortBy as string;
         let order = req.query.order as 'asc' | 'desc';
 
-        let actions = req.query.actions as string[];
-        let userCodes = req.query.userCodes as string[];
-        let statusCodes = req.query.statusCodes as string[];
-        let labnumbers = req.query.labnumbers as string[];
+        let actions = toArray(req.query.actions as string[]);
+        let userCodes = toArray(req.query.userCodes as string[]);
+        let statusCodes = toArray(req.query.statusCodes as string[]);
+        let labnumbers = toArray(req.query.labnumbers as string[]);
 
         let lowerResTime = req.query.lowerResTime ? parseInt(req.query.lowerResTime as string, 10) : undefined;
         let upperResTime = req.query.upperResTime ? parseInt(req.query.upperResTime as string, 10) : undefined;
+
         let startDate = req.query.startDate ? new Date(req.query.startDate as string) : undefined;
         let endDate = req.query.endDate ? new Date(req.query.endDate as string) : undefined;
+        
         const filter: Record<string, any> = {};
 
         if (actions && actions.length > 0) {
@@ -154,9 +156,18 @@ router.get('/get-paginated-logs', async (req: Request, res: Response) => {
         });
 
         res.send(result);
+        
     } catch (err) {
         res.status(500).json({ error: `Failed to fetch logs: ${err}` });
     }
 })
+
+function toArray(data: any){
+    if (!data) return [];
+    else if (!Array.isArray(data)) {
+        return [data];
+    }
+    return data
+}
 
 export default router;
