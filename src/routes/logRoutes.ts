@@ -64,7 +64,7 @@ const router = Router();
  *          schema:
  *            type: string
  *        - in: query
- *          name: userCodes
+ *          name: userIds
  *          schema:
  *            type: array
  *            items:
@@ -105,7 +105,7 @@ router.get('/get-paginated-logs', async (req: Request, res: Response) => {
         let order = req.query.order as 'asc' | 'desc';
 
         let actions = toArray(req.query.actions as string[]);
-        let userCodes = toArray(req.query.userCodes as string[]);
+        let userIds = toArray(req.query.userIds as string[]);
         let statusCodes = toArray(req.query.statusCodes as string[]);
         let labnumbers = toArray(req.query.labnumbers as string[]);
 
@@ -114,39 +114,17 @@ router.get('/get-paginated-logs', async (req: Request, res: Response) => {
 
         let startDate = req.query.startDate ? new Date(req.query.startDate as string) : undefined;
         let endDate = req.query.endDate ? new Date(req.query.endDate as string) : undefined;
-        
-        const filter: Record<string, any> = {};
 
-        if (actions && actions.length > 0) {
-            filter.action = { $in: actions };
-        }
-
-        if (userCodes && userCodes.length > 0) {
-            const objectIds = userCodes.map(id => new mongoose.Types.ObjectId(id));
-            filter.userId = { $in: objectIds };
-        }
-
-        if (statusCodes && statusCodes.length > 0) {
-            filter['response.statusCode'] = { $in: statusCodes }
-        }
-
-        if (labnumbers && labnumbers.length > 0) {
-            filter.labnumber = { $in: labnumbers };
-        }
-
-        if (startDate && endDate) {
-            filter.timestamp = {
-                $gte: startDate,
-                $lte: endDate
-            };
-        }
-
-        if (lowerResTime && upperResTime) {
-            filter['response.timeMs'] = {
-                $gte: lowerResTime,
-                $lte: upperResTime
-            }
-        }
+        const filter = buildFilter(
+            actions,
+            userIds,
+            statusCodes,
+            labnumbers,
+            lowerResTime,
+            upperResTime,
+            startDate,
+            endDate
+        )
 
         const result = await logPaginator.paginate(filter, {
             page: page,
@@ -166,7 +144,54 @@ router.get('/get-paginated-logs', async (req: Request, res: Response) => {
     }
 })
 
-function toArray(data: any){
+function buildFilter(
+    actions?:        string[],
+    userIds?:        string[],
+    statusCodes?:    string[],
+    labnumbers?:     string[],
+    lowerResTime?:   number,
+    upperResTime?:   number,
+    startDate?:      Date,
+    endDate?:        Date,
+): Record<string, any> {
+
+    const filter: Record<string, any> = {};
+
+    if (actions && actions.length > 0) {
+        filter.action = { $in: actions };
+    }
+
+    if (userIds && userIds.length > 0) {
+        const objectIds = userIds.map(id => new mongoose.Types.ObjectId(id));
+        filter.userId = { $in: objectIds };
+    }
+
+    if (statusCodes && statusCodes.length > 0) {
+        filter['response.statusCode'] = { $in: statusCodes }
+    }
+
+    if (labnumbers && labnumbers.length > 0) {
+        filter.labnumber = { $in: labnumbers };
+    }
+
+    if (lowerResTime && upperResTime) {
+        filter['response.timeMs'] = {
+            $gte: lowerResTime,
+            $lte: upperResTime
+        }
+    }
+
+    if (startDate && endDate) {
+        filter.timestamp = {
+            $gte: startDate,
+            $lte: endDate
+        };
+    }
+
+    return filter;
+}
+
+function toArray<T>(data: T | T[] | undefined): T[] {
     if (!data) return [];
     else if (!Array.isArray(data)) {
         return [data];
