@@ -3,6 +3,7 @@ import type { Request, Response } from 'express';
 import Log from '../models/log.ts';
 import { Paginator } from '../utils/pagination.ts';
 import mongoose from 'mongoose';
+import { Action } from '../constants/actions.ts'
 
 const router = Router();
 
@@ -48,7 +49,7 @@ const router = Router();
  *          name: order
  *          schema:
  *            type: string
- *            enum: [asc, desc]
+ *            enum: [asc, desc, custom]
  *        - in: query
  *          name: actions
  *          schema:
@@ -104,7 +105,7 @@ router.get('/get-paginated-logs', async (req: Request, res: Response) => {
         let sortBy = req.query.sortBy as string;
         let order = req.query.order as 'asc' | 'desc';
 
-        let actions = toArray(req.query.actions as string[]);
+        let actions = toArray(req.query.actions as Action[]);
         let userIds = toArray(req.query.userIds as string[]);
         let statusCodes = toArray(req.query.statusCodes as string[]);
         let labnumbers = toArray(req.query.labnumbers as string[]);
@@ -145,7 +146,7 @@ router.get('/get-paginated-logs', async (req: Request, res: Response) => {
 })
 
 function buildFilter(
-    actions?:        string[],
+    actions?:        Action[],
     userIds?:        string[],
     statusCodes?:    string[],
     labnumbers?:     string[],
@@ -193,10 +194,7 @@ function buildFilter(
 
 function toArray<T>(data: T | T[] | undefined): T[] {
     if (!data) return [];
-    else if (!Array.isArray(data)) {
-        return [data];
-    }
-    return data
+    return Array.isArray(data) ? data : [data];
 }
 
 export default router;

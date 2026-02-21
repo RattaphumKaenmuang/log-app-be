@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document, Types } from 'mongoose';
+import { Action, ACTION_ORDER } from '../constants/actions.ts';
 
 export interface IRequest {
     method: string;
@@ -16,13 +17,19 @@ export interface ILog extends Document {
     timestamp: Date;
     request: IRequest;
     response: IResponse;
-    action: string;
+    action: Action;
     userId: Types.ObjectId;
 };
 
 const LogSchema = new Schema({
-    labnumber:  { type: [String], required: true },
-    timestamp:  { type: Date, required: true },
+    labnumber:  {
+        type: [String],
+        required: true
+    },
+    timestamp:  {
+        type: Date,
+        required: true
+    },
     request: {
         method:     { type: String, required: true },
         endpoint:   { type: String, required: true }
@@ -32,8 +39,12 @@ const LogSchema = new Schema({
         message:    { type: String, required: true },
         timeMs:     { type: Number, required: true }
     },
-    action:     { type: String, required: true },
-    userId:     { 
+    action: {
+        type: String,
+        enum: Object.values(Action),
+        required: true
+    },
+    userId: { 
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: true,
