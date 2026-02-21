@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document, Types } from 'mongoose';
 
 export interface IRequest {
     method: string;
@@ -17,7 +17,7 @@ export interface ILog extends Document {
     request: IRequest;
     response: IResponse;
     action: string;
-    userId: string;
+    userId: Types.ObjectId;
 };
 
 const LogSchema = new Schema({
@@ -33,7 +33,7 @@ const LogSchema = new Schema({
         timeMs:     { type: Number, required: true }
     },
     action:     { type: String, required: true },
-    userId:     { type: String, required: true }
+    userId:     { type: Schema.Types.ObjectId, required: true }
 });
 
 export default mongoose.model<ILog>('Log', LogSchema);

@@ -2,6 +2,7 @@ import { Router } from 'express';
 import type { Request, Response } from 'express';
 import Log from '../models/log.ts';
 import { Paginator } from '../utils/pagination.ts';
+import mongoose from 'mongoose';
 
 const router = Router();
 
@@ -119,7 +120,8 @@ router.get('/get-paginated-logs', async (req: Request, res: Response) => {
         }
 
         if (userCodes && userCodes.length > 0) {
-            filter.userId = { $in: userCodes };
+            const objectIds = userCodes.map(id => new mongoose.Types.ObjectId(id));
+            filter.userId = { $in: objectIds };
         }
 
         if (statusCodes && statusCodes.length > 0) {
@@ -144,7 +146,6 @@ router.get('/get-paginated-logs', async (req: Request, res: Response) => {
             }
         }
 
-        console.log(filter)
         const result = await logPaginator.paginate(filter, {
             page: page,
             limit: limit,
