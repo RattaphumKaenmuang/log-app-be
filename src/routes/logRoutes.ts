@@ -152,7 +152,11 @@ router.get('/get-paginated-logs', async (req: Request, res: Response) => {
             page: page,
             limit: limit,
             sortBy: sortBy,
-            order: order
+            order: order,
+            populate: {
+                path: 'userId',
+                select: 'prefix firstname lastname'
+            }
         });
 
         res.send(result);

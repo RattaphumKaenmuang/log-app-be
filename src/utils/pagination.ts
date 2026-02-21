@@ -1,10 +1,11 @@
-import { Model, Document } from 'mongoose';
+import { Model, Document, type PopulateOptions } from 'mongoose';
 
 export interface PaginationParams {
     page?: number;
     limit?: number;
     sortBy?: string;
     order?: 'asc' | 'desc';
+    populate?: PopulateOptions | PopulateOptions[];
 }
 
 export interface PaginatedResponse<T> {
@@ -33,12 +34,17 @@ export class Paginator<T extends Document> {
         const sortBy = params.sortBy || 'timestamp';
         const order = params.order === 'asc' ? 1 : -1;
         
-        const data = await this.model
+        let query = this.model
             .find(filter)
             .sort({ [sortBy]: order })
             .skip((page-1) * limit)
             .limit(limit);
 
+        if (params.populate) {
+            query = query.populate(params.populate)
+        }
+
+        const data = await query;
         const total = await this.model.countDocuments(filter);
 
         return {
