@@ -30,7 +30,7 @@ const LogSchema = new Schema({
     response: {
         statusCode: { type: String, required: true },
         message:    { type: String, required: true },
-        timeMs:     { type: String, required: true }
+        timeMs:     { type: Number, required: true }
     },
     action:     { type: String, required: true },
     userId:     { type: String, required: true }
