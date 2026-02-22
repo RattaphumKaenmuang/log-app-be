@@ -6,7 +6,7 @@ const router = Router();
 
 /** 
  * @swagger
- * /get-all-users:
+ * /user/get-all-users:
  *  get:
  *      summary: Get all users
  *      responses:
@@ -27,7 +27,7 @@ router.get('/get-all-users', async (req: Request, res: Response) => {
 
 /**
  * @swagger
- * /get-all-existing-users:
+ * /user/get-all-existing-users:
  *  get:
  *      summary: Get all users whose isDel is false
  *      responses:
