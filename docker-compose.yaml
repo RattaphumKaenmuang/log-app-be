@@ -6,7 +6,7 @@ services:
     env_file:
       - .env
     environment:
-      MONGO_URI: 
+      MONGO_URI: ${MONGO_URI}
 
   mongodb:
     image: mongo:latest
