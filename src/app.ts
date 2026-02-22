@@ -14,8 +14,8 @@ app.use(express.json());
 connectDB();
 setupSwagger(app);
 
-app.use('/user', userRoutes);
-app.use('/log', logRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/log', logRoutes);
 
 app.listen(PORT, () => {
     console.log(`Running on Port ${PORT}`);
