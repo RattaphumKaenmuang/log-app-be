@@ -175,7 +175,7 @@ function buildFilter(
         filter.labnumber = { $in: labnumbers };
     }
 
-    if (lowerResTime && upperResTime) {
+    if (lowerResTime !== undefined && upperResTime !== undefined) {
         filter['response.timeMs'] = {
             $gte: lowerResTime,
             $lte: upperResTime
