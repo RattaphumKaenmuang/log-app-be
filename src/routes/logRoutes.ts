@@ -9,7 +9,7 @@ const router = Router();
 
 // /**
 //  * @swagger
-//  * /log/get-all-logs:
+//  * /api/log/get-all-logs:
 //  *  get:
 //  *      summary: Get all logs
 //  *      responses:
@@ -29,7 +29,7 @@ const router = Router();
 
 /**
  * @swagger
- * /log/get-paginated-logs:
+ * /api/log/get-paginated-logs:
  *  get:
  *      summary: Get paginated logs
  *      parameters:
