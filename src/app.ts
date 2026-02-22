@@ -1,9 +1,9 @@
 import express from 'express';
 import cors from 'cors';
-import { setupSwagger } from './utils/swagger.ts';
-import userRoutes from './routes/userRoutes.ts';
-import logRoutes from './routes/logRoutes.ts';
-import { connectDB } from './config/mongo.ts';
+import { setupSwagger } from './utils/swagger.js';
+import userRoutes from './routes/userRoutes.js';
+import logRoutes from './routes/logRoutes.js';
+import { connectDB } from './config/mongo.js';
 
 const app = express();
 const PORT = 3000;

@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document, Types } from 'mongoose';
-import { Action, ACTION_ORDER } from '../constants/actions.ts';
+import { Action, ACTION_ORDER } from '../constants/actions.js';
 
 export interface IRequest {
     method: string;

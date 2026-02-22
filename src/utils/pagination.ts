@@ -1,5 +1,5 @@
 import { Model, Document, type PopulateOptions } from 'mongoose';
-import { ACTION_ORDER } from '../constants/actions.ts';
+import { ACTION_ORDER } from '../constants/actions.js';
 
 export interface PaginationParams {
     page?: number;

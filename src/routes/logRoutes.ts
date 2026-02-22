@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import type { Request, Response } from 'express';
-import Log from '../models/log.ts';
-import { Paginator } from '../utils/pagination.ts';
+import Log from '../models/log.js';
+import { Paginator } from '../utils/pagination.js';
 import mongoose from 'mongoose';
-import { Action } from '../constants/actions.ts'
+import { Action } from '../constants/actions.js'
 
 const router = Router();
 
