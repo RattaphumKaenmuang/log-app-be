@@ -16,5 +16,5 @@
    ```
    docker-compose up -d
    ```
-5. The backend pagAPI should be accessible at http://localhost:3000/api (Nothing will be returned here)
+5. The backend API should be accessible at http://localhost:3000/api (Nothing will be returned here)
    * The OpenAPI swagger page should be accessible at http://localhost:3000/docs
